@@ -29,39 +29,35 @@ const jsLoaders = () => {
 
 // Exports
 module.exports = {
-  context: path.resolve(__dirname, "src"), // Чтобы не перемешивать файлы проекта и файлы конфигурации создается поле context, куда передается путь до папки и исходниками. __dirname - абсолютный путь до папки проекта, "src" - папка с исходниками внутри проекта. То есть далее можно не указывать поля source для плагинов, так как все будет выполняться в этом контексте
-  mode: "development", // Режим проекта
-  entry: ["@babel/polyfill", "./index.js"], // Файл, с которого все начинается
+  context: path.resolve(__dirname, "src"),
+  mode: "development",
+  entry: ["@babel/polyfill", "./index.js"],
   output: {
-    // То куда, будет возвращаен сбилженый результат работы
-    filename: "bundle.[fullhash].js", // [hash] добавляется для того, чтобы избежать проблемы с кешированием
-    path: path.resolve(__dirname, "dist"), // path.resolve() - возвращает строчку с абсолютным путем
+    filename: "bundle.[fullhash].js",
+    path: path.resolve(__dirname, "dist"),
   },
   resolve: {
-    extensions: [".js"], // Позволяет не писать .js в импорте после названия файла
-    // import '../../../../core/Components => import @core/Component
+    extensions: [".js"],
     alias: {
       "@": path.resolve(__dirname, "src"),
       "@core": path.resolve(__dirname, "src/core"),
     },
   },
-  devtool: isDev ? "source-map" : false, // В девтулзах будет отображаться scss, вместо css
+  devtool: isDev ? "source-map" : false,
   devServer: {
     port: 4200,
     hot: isDev,
   },
   plugins: [
-    // Массив для плагинов
-    new CleanWebpackPlugin(), // Плагин, очищающий папку dist, чтобы там всегда была актуальная версия файла
+    new CleanWebpackPlugin(),
     new HTMLWebpackPlugin({
-      template: "index.html", // Шаблон для генерации HTML
+      template: "index.html",
       minify: {
         removeComments: isProd,
         collapseWhitespace: isProd,
       },
     }),
     new CopyPlugin(
-      // Используется для переноса favicon
       {
         patterns: [
           {
@@ -76,11 +72,10 @@ module.exports = {
     }),
   ],
   module: {
-    // Для корректной работы sass/scss необходимо добавить лоадеры, через которые будет пропущен код
     rules: [
       {
-        test: /\.s[ac]ss$/i, // sass/scss
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"], // Код пропускается справа налево, sass-loader => css-loader => MiniCssExtractPlugin.loader
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
         test: /\.m?js$/,
