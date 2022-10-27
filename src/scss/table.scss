@@ -16,6 +16,8 @@
     height: $row-height;
 
     &-info {
+      position: relative;
+
       display: flex;
       justify-content: center;
       align-items: center;
@@ -32,6 +34,7 @@
   }
 
   .column {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,6 +63,44 @@
       border: none;
       outline: 2px solid #3c74ff;
       z-index: 2;
+    }
+  }
+
+  .col-resize,
+  .row-resize {
+    position: absolute;
+    background: rgb(152, 229, 255);
+    opacity: 0;
+
+    @media (any-hover: hover) {
+      &:hover {
+        opacity: 1 !important;
+        visibility: visible;
+      }
+    }
+  }
+
+  .col-resize {
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    @media (any-hover: hover) {
+      &:hover {
+        cursor: col-resize;
+      }
+    }
+  }
+
+  .row-resize {
+    width: 100%;
+    bottom: 0;
+    height: 4px;
+
+    @media (any-hover: hover) {
+      &:hover {
+        cursor: row-resize;
+      }
     }
   }
 }
