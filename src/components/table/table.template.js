@@ -3,24 +3,31 @@ const CODES = {
   Z: 90,
 };
 
-const createCell = () => {
+const createCell = (index) => {
   return `
-	<div class="cell" contenteditable></div>
+	<div class="cell" contenteditable data-column-parent="${index}"></div>
   `;
 };
 
-const createCol = (col) => {
+const createCol = (index, col) => {
   return `
-		<div class="column">
+		<div class="column" data-parent="column" data-column="${index}">
 			${col}
-		</div>
+      <span class="col-resize" data-resize="col"></span>
+    </div>
 	`;
 };
 
-const createRow = (content, cells) => {
+const createRow = (index, cells) => {
+  const resize = index
+    ? '<span class="row-resize" data-resize="row"></span>'
+    : "";
   return `
-		<div class="row">
-			<div class="row-info">${content ? content : ""}</div>
+		<div class="row" data-parent="row">
+			<div class="row-info">
+        ${index ? index : ""}
+        ${resize}
+      </div>
 			<div class="row-data">${cells}</div>
 		</div>
 	
@@ -36,8 +43,8 @@ export function createTable(rowsCount = 15) {
   const colsArray = new Array(colsCount).fill("");
   const rows = [];
 
-  const cols = colsArray.map((_, i) => createCol(toChar(i))).join("");
-  const cells = colsArray.map((_, i) => createCell()).join("");
+  const cols = colsArray.map((_, i) => createCol(i, toChar(i))).join("");
+  const cells = colsArray.map((_, i) => createCell(i)).join("");
 
   rows.push(createRow(null, cols));
   for (let i = 1; i < rowsCount + 1; i++) {
