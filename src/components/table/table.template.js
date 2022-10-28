@@ -3,9 +3,9 @@ const CODES = {
   Z: 90,
 };
 
-const createCell = (index) => {
+const createCell = (row, index) => {
   return `
-	<div class="cell" contenteditable data-column-parent="${index}"></div>
+	<div class="cell" contenteditable data-id="${row}:${index}" data-column-parent="${index}"></div>
   `;
 };
 
@@ -28,7 +28,7 @@ const createRow = (index, cells) => {
         ${index ? index : ""}
         ${resize}
       </div>
-			<div class="row-data">${cells}</div>
+			<div class="row-data" data-row="${index ? index : ""}">${cells}</div>
 		</div>
 	
 	`;
@@ -44,11 +44,10 @@ export function createTable(rowsCount = 15) {
   const rows = [];
 
   const cols = colsArray.map((_, i) => createCol(i, toChar(i))).join("");
-  const cells = colsArray.map((_, i) => createCell(i)).join("");
-
   rows.push(createRow(null, cols));
-  for (let i = 1; i < rowsCount + 1; i++) {
-    rows.push(createRow(i, cells));
+  for (let row = 1; row < rowsCount + 1; row++) {
+    const cells = colsArray.map((_, i) => createCell(row - 1, i)).join("");
+    rows.push(createRow(row, cells));
   }
 
   return rows.join("");

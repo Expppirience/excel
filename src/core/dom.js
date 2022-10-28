@@ -43,6 +43,10 @@ class Dom {
     return this.$el.getBoundingClientRect();
   }
 
+  find(selector) {
+    return $(this.$el.querySelector(selector));
+  }
+
   findAll(selector) {
     return this.$el.querySelectorAll(selector);
   }
@@ -50,11 +54,44 @@ class Dom {
   get data() {
     return this.$el.dataset;
   }
+  focus() {
+    this.$el.focus();
+  }
 
   css(styles = {}) {
     [...Object.keys(styles)].forEach(
       (key) => (this.$el.style[`${key}`] = styles[key])
     );
+  }
+  addClass(className) {
+    this.$el.classList.add(className);
+  }
+  removeClass(className) {
+    this.$el.classList.remove(className);
+  }
+
+  hasClass(className) {
+    return this.$el.classList.contains(className);
+  }
+
+  id(shouldParse) {
+    if (shouldParse) {
+      const parsed = this.id().split(":");
+      return {
+        row: +parsed[0],
+        col: +parsed[1],
+      };
+    }
+    return this.$el.dataset.id;
+  }
+
+  text(text) {
+    if (text) {
+      this.$el.textContent = text;
+      return this;
+    }
+    if (this.$el.tagName == "INPUT") return this.$el.value.trim();
+    return this.$el.textContent.trim();
   }
 }
 
