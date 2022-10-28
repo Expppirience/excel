@@ -16,7 +16,6 @@ export class Formula extends ExcelComponent {
     super.init();
 
     this.$formulaInput = this.$root.find("#formula");
-    console.log(this.$formulaInput);
 
     this.$on("table:switchCell", ($cell) => {
       this.$formulaInput.text($cell.text());

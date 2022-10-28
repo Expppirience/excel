@@ -4,7 +4,6 @@ export function resizeTable($el, $root, event) {
   let debounceTimer;
   const $resizer = $(event.target);
   const $parent = $resizer.closest("[data-parent]");
-  console.log($resizer);
   const parentType = $parent.data.parent;
   const coords = $parent.getCoords();
   if (parentType == "row") {
