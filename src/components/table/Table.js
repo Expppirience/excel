@@ -9,6 +9,7 @@ import {
 } from "./table.functions";
 import { TableSelection } from "./TableSelection";
 import { $ } from "../../core/dom";
+import { changeText, tableResize } from "./../../redux/actionCreators";
 
 export class Table extends ExcelComponent {
   static className = "excel__table";
@@ -33,6 +34,7 @@ export class Table extends ExcelComponent {
     this.selectCell($cell);
     this.$on("formula:input", (text) => {
       this.selection.current.text(text);
+      this.dispatchText(this.selection.current.text());
     });
 
     this.$on("formula:enterPressed", () => {
@@ -45,8 +47,17 @@ export class Table extends ExcelComponent {
     this.$trigger("table:switchCell", $cell);
   }
 
+  async resizeHandler(event) {
+    try {
+      const data = await resizeTable(this.$el, this.$root, event);
+      this.$dispatch(tableResize(data));
+    } catch (e) {
+      console.log("RESIZE ERROR: ", e.message);
+    }
+  }
+
   toHTML() {
-    return createTable(20);
+    return createTable(20, this.store.getState());
   }
 
   onKeydown(event) {
@@ -60,8 +71,7 @@ export class Table extends ExcelComponent {
   }
 
   onMousedown(event) {
-    shouldResize(event) ? resizeTable(this.$el, this.$root, event) : "";
-
+    shouldResize(event) ? this.resizeHandler(event) : "";
     if (isCell(event)) {
       const $target = $(event.target);
       if (event.shiftKey) {
@@ -78,7 +88,16 @@ export class Table extends ExcelComponent {
     }
   }
 
+  dispatchText(value) {
+    this.$dispatch(
+      changeText({
+        id: this.selection.current.id(),
+        value: value,
+      })
+    );
+  }
+
   onInput(event) {
-    this.$trigger("table:input", $(event.target));
+    this.dispatchText($(event.target).text());
   }
 }

@@ -1,6 +1,5 @@
 import { $ } from "../../core/dom";
 import { range } from "../../core/utils";
-import { TableSelection } from "./TableSelection";
 
 export function shouldResize(event) {
   return event.target.dataset.resize;
