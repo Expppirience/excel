@@ -19,7 +19,7 @@ export class Formula extends ExcelComponent {
     this.$formulaInput = this.$root.find("#formula");
 
     this.$on("table:switchCell", ($cell) => {
-      this.$formulaInput.text($cell.text());
+      this.$formulaInput.text($cell.data.value);
     });
   }
 

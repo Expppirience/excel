@@ -40,7 +40,7 @@ export function resizeTable($el, $root, event) {
         : $resizer.css({ opacity: 0, height: "100%" });
       res({
         type: parentType,
-        size: value,
+        value: value,
         id: $parent.data[parentType],
       });
     };

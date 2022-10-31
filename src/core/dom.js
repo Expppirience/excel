@@ -86,12 +86,27 @@ class Dom {
   }
 
   text(text) {
-    if (text) {
+    if (text !== "undefind") {
       this.$el.textContent = text;
       return this;
     }
     if (this.$el.tagName == "INPUT") return this.$el.value.trim();
     return this.$el.textContent.trim();
+  }
+
+  attr(name, value = "") {
+    if (value) {
+      this.$el.setAttribute(name, value);
+      return this;
+    }
+    return this.$el.getAttribute(name);
+  }
+
+  getStyles(styles = []) {
+    return styles.reduce((res, styleName) => {
+      res[styleName] = this.$el.style[styleName];
+      return res;
+    }, {});
   }
 }
 

@@ -1,11 +1,9 @@
-
 export class TableSelection {
   static selectedClass = "selected";
   constructor($root) {
     this.group = [];
     this.$root = $root;
     this.current = null;
-
   }
 
   deselect() {
@@ -27,4 +25,11 @@ export class TableSelection {
     this.group.forEach((cell) => cell.addClass(TableSelection.selectedClass));
   }
 
+  applyStyle(style) {
+    this.group.forEach(($el) => $el.css(style));
+  }
+
+  get selectedIDs() {
+    return this.group.map(($el) => $el.id());
+  }
 }

@@ -26,3 +26,21 @@ export function isEqual(a, b) {
   }
   return a === b;
 }
+
+export function changeCase(str) {
+  return str.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+}
+
+export function stringifyStyle(styles = {}) {
+  return Object.keys(styles)
+    .map((styleName) => `${changeCase(styleName)}:${styles[styleName]};`)
+    .join("");
+}
+
+export const debounce = (callback, delay) => {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => callback(...args), delay);
+  };
+};
