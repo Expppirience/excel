@@ -4,6 +4,7 @@ export class StoreSubscriber {
   constructor(store) {
     this.store = store;
     this.sub = null;
+    this.prevState = {};
   }
 
   subscribeComponents(components) {
@@ -22,7 +23,6 @@ export class StoreSubscriber {
       this.prevState = this.store.getState();
     });
   }
-
   unsubscribeFromStore() {
     this.sub.unsubsribe();
   }

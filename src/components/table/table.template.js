@@ -1,3 +1,7 @@
+import { stringifyStyle } from "../../core/utils";
+import { defaultStyles } from "./../../constants";
+import { parse } from "./../../core/parse";
+
 const CODES = {
   A: 65,
   Z: 90,
@@ -8,17 +12,26 @@ const DEFAULT_SIZES = {
   height: 25,
 };
 
-const createCell = (row, index, width, value) => {
+const createCell = (state, row, index) => {
+  const id = `${row}:${index}`;
+  const width = getWidth(state.colState, index);
+  const value = state.cellsState[id] ? state.cellsState[id] : "";
+  const styles = {
+    ...defaultStyles,
+    ...state.stylesState[id],
+  };
+
   return `
-	<div class="cell" contenteditable style="width: ${width}px" data-id="${row}:${index}" data-column-parent="${index}">
-    ${value}
+	<div class="cell" contenteditable data-value="${value}" style="${stringifyStyle(
+    styles
+  )} width: ${width}px" data-id="${id}" data-column-parent="${index}">
+    ${parse(value)}
   </div>
   `;
 };
-
 const createCol = (index, col, width, value) => {
   return `
-		<div class="column" style="width: ${width}px"  data-parent="column" data-column="${index}">
+		<div class="column" style=" width: ${width}px"   data-parent="column" data-column="${index}">
 			${col}
       <span class="col-resize" data-resize="col">${value || ""}</span>
     </div>
@@ -64,14 +77,7 @@ export function createTable(rowsCount = 15, state = {}) {
   rows.push(createRow(null, cols, DEFAULT_SIZES.height));
   for (let row = 1; row < rowsCount + 1; row++) {
     const cells = colsArray
-      .map((_, i) =>
-        createCell(
-          row - 1,
-          i,
-          getWidth(state.colState, i),
-          getText(state.cellsState, row - 1, i)
-        )
-      )
+      .map((_, i) => createCell(state, row - 1, i))
       .join("");
     rows.push(createRow(row, cells, getHeight(state.rowState, row)));
   }

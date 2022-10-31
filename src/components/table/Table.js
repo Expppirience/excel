@@ -9,7 +9,14 @@ import {
 } from "./table.functions";
 import { TableSelection } from "./TableSelection";
 import { $ } from "../../core/dom";
-import { changeText, tableResize } from "./../../redux/actionCreators";
+import {
+  applyStyle,
+  changeStyles,
+  changeText,
+  tableResize,
+} from "./../../redux/actionCreators";
+import { defaultStyles } from "./../../constants";
+import { parse } from "./../../core/parse";
 
 export class Table extends ExcelComponent {
   static className = "excel__table";
@@ -27,24 +34,32 @@ export class Table extends ExcelComponent {
   prepare() {
     this.selection = new TableSelection(this.$root);
   }
-
   init() {
     super.init();
     const $cell = this.$root.find('[data-id="0:0"]');
     this.selectCell($cell);
     this.$on("formula:input", (text) => {
-      this.selection.current.text(text);
-      this.dispatchText(this.selection.current.text());
+      this.selection.current.attr("data-value", text);
+      this.selection.current.text(parse(text));
+      this.dispatchText(this.selection.current.data.value);
     });
-
     this.$on("formula:enterPressed", () => {
       this.selection.current.focus();
+    });
+
+    this.$on("toolbar:applyStyle", (style) => {
+      this.$dispatch(
+        applyStyle({ style: style, ids: this.selection.selectedIDs })
+      );
+      this.selection.applyStyle(style);
     });
   }
 
   selectCell($cell) {
     this.selection.select($cell);
     this.$trigger("table:switchCell", $cell);
+    const styles = $cell.getStyles(Object.keys(defaultStyles));
+    this.$dispatch(changeStyles(styles));
   }
 
   async resizeHandler(event) {
@@ -52,7 +67,6 @@ export class Table extends ExcelComponent {
       const data = await resizeTable(this.$el, this.$root, event);
       this.$dispatch(tableResize(data));
     } catch (e) {
-      console.log("RESIZE ERROR: ", e.message);
     }
   }
 

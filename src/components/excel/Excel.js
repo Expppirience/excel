@@ -9,8 +9,6 @@ export class Excel {
     this.observer = new Observer();
     this.store = options.store;
     this.subsriber = new StoreSubscriber(this.store);
-    console.log(new StoreSubscriber(this.store));
-    console.log(this.store, "FROM EXCEL");
   }
 
   getRoot() {
@@ -38,6 +36,6 @@ export class Excel {
 
   destroy() {
     this.subsriber.unsubscribeFromStore();
-    this.components.forEach((component) => component.destro());
+    this.components.forEach((component) => component.destroy());
   }
 }
