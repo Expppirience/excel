@@ -8,11 +8,11 @@ const generateName = (state) => {
 `;
 };
 
-const generateBtns = (btn) => {
+const generateBtns = ({ icon, action }) => {
   return `
 
-        <div class="button">
-          <i class="material-icons">${btn.icon}</i>
+        <div class="button" data-action="${action}">
+          <i class="material-icons" >${icon}</i>
         </div>
 
 	`;
@@ -22,9 +22,11 @@ export function createHeader(state) {
   const btns = [
     {
       icon: "delete",
+      action: "delete",
     },
     {
       icon: "exit_to_app",
+      action: "exit",
     },
   ];
 

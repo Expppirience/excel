@@ -39,6 +39,10 @@ class Dom {
     return $(this.$el.closest(selector));
   }
 
+  exists() {
+    return this.$el;
+  }
+
   getCoords() {
     return this.$el.getBoundingClientRect();
   }
@@ -86,7 +90,7 @@ class Dom {
   }
 
   text(text) {
-    if (text !== "undefind") {
+    if (text) {
       this.$el.textContent = text;
       return this;
     }

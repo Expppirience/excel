@@ -4,6 +4,7 @@ import {
   TABLE_RESIZE,
   APPLY_STYLE,
   CHANGE_TITLE,
+  LAST_SEEN,
 } from "./types";
 
 export function rootReducer(state, action) {
@@ -12,7 +13,6 @@ export function rootReducer(state, action) {
     case TABLE_RESIZE:
       field = action.data.type == "row" ? "rowState" : "colState";
       return { ...state, [field]: getValue(state, field, action) };
-
     case CHANGE_TEXT:
       field = "cellsState";
       return {
@@ -35,6 +35,9 @@ export function rootReducer(state, action) {
     case CHANGE_TITLE:
       field = "currentTitle";
       return { ...state, [field]: action.data };
+    case LAST_SEEN:
+      field = "lastSeen";
+      return { ...state, [field]: action.data.toLocaleDateString(undefined) };
     default:
       return state;
   }

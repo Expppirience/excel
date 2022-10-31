@@ -1,10 +1,10 @@
 import { $ } from "@core/dom";
 import { Observer } from "./../../core/Observer";
 import { StoreSubscriber } from "../../core/StoreSubsriber";
+import { lastSeen } from "../../redux/actionCreators";
 
 export class Excel {
-  constructor(selector, options) {
-    this.$app = $(selector);
+  constructor(options) {
     this.components = options.components || [];
     this.observer = new Observer();
     this.store = options.store;
@@ -28,8 +28,8 @@ export class Excel {
     return $root;
   }
 
-  render() {
-    this.$app.append(this.getRoot());
+  init() {
+    this.store.dispatch(lastSeen(new Date()));
     this.subsriber.subscribeComponents(this.components);
     this.components.forEach((component) => component.init());
   }
