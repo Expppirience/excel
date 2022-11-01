@@ -37,3 +37,4 @@ export class Router {
     this.page.afterRender();
   }
 }
+
