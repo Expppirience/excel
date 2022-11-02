@@ -1,5 +1,6 @@
-import { $ } from "@core/dom";
+// import { $ } from "@core/dom";
 import { ActiveRoute } from "./ActiveRoute";
+import { $ } from "../dom.js";
 
 export class Router {
   constructor(selector, routes) {
@@ -13,7 +14,7 @@ export class Router {
 
     this.changePageHandler = this.changePageHandler.bind(this);
 
-    this.init(0);
+    this.init();
   }
 
   init() {
@@ -37,4 +38,3 @@ export class Router {
     this.page.afterRender();
   }
 }
-
